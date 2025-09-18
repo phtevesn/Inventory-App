@@ -8,9 +8,10 @@ type TextBoxProps = {
   type: string;
   value: string;
   onChange: (val: string) => void;
+  required?: boolean;
 };
 
-export default function TextBox({name, label, type, value, onChange}: TextBoxProps){
+export default function TextBox({name, label, type, value, onChange, required}: TextBoxProps){
 
     return (
         <div>
@@ -21,6 +22,7 @@ export default function TextBox({name, label, type, value, onChange}: TextBoxPro
                 type={type}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
+                required={required}
             />
         </div>
     );

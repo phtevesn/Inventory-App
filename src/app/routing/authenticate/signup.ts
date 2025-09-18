@@ -1,11 +1,25 @@
 'use server';
 
-export async function addUser(formData: FormData){
-    const rawFormData = {
-        username: formData.get('username'),
-        firstname: formData.get('firstname'),
-        lastname: formData.get('lastname'),
-        email: formData.get('email'),
-        password: formData.get('password')   
-    }
+type signUpForm = {
+    username: string,
+    firstname: string, 
+    lastname: string,
+    email: string,
+    password:string
+}
+
+export async function addUser(formData: signUpForm){
+    console.log(formData);
+
+    /*
+    const res = await fetch('http://localhost:5432', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+    });
+    
+   
+    const result = await res.json();
+    return result;
+    */
 }
