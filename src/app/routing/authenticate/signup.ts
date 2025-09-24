@@ -9,7 +9,6 @@ type signUpForm = {
 }
 
 export async function addUser(formData: signUpForm){
-    console.log(formData);
 
     const res = await fetch('http://localhost:8000/users/signup', {
         method: 'POST',
