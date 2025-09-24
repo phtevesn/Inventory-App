@@ -11,15 +11,13 @@ type signUpForm = {
 export async function addUser(formData: signUpForm){
     console.log(formData);
 
-    /*
-    const res = await fetch('http://localhost:5432', {
+    const res = await fetch('http://localhost:8000/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
     });
     
-   
     const result = await res.json();
     return result;
-    */
+    
 }

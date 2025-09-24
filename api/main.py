@@ -2,11 +2,11 @@ from fastapi import FastAPI
 import uvicorn
 
 from routers import health
-from routers import signup
+from routers import users
 
 app = FastAPI()
 app.include_router(health.router)
-app.include_router(signup.router)
+app.include_router(users.router)
 
 @app.get("/")
 def root():
