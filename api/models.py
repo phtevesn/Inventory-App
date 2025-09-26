@@ -17,3 +17,5 @@ class Users(Base):
   firstname = Column(String, nullable=False)
   lastname = Column(String, nullable=False)
   
+
+  

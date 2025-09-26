@@ -12,6 +12,22 @@ router = APIRouter()
 
 @router.post("/users/signup")
 def signup(user_info: SignUp, db: Session = Depends(get_db)):
+  username = user_info.username
+  email = user_info.email
+  
+  user = db.query(Users).filter(Users.username == username).first()
+  if user:
+    raise HTTPException(
+      status_code=status.HTTP_409_CONFLICT,
+      detail="user"
+    )
+  user = db.query(Users).filter(Users.email == email).first()
+  if user:
+    raise HTTPException(
+      status_code=status.HTTP_409_CONFLICT,
+      detail="email"
+    )
+  
   db_user = Users(
     username = user_info.username, 
     firstname = user_info.firstname,

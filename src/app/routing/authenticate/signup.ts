@@ -16,7 +16,7 @@ export async function addUser(formData: signUpForm){
         body: JSON.stringify(formData),
     });
     
+    const status = res.status
     const result = await res.json();
-    return result;
-    
+    return {status, result};
 }
