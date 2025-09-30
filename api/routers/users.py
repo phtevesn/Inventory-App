@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from datetime import timedelta
@@ -8,7 +9,7 @@ import jwt
 from db import get_db
 from utils import verify_password
 from services.user_service import get_user_by_username, get_user_by_email, add_user
-from services.auth_service import create_access_token
+from services.auth_service import create_access_token, get_current_user
 
 from models import Users
 from schemas import SignUp, Login, Token
@@ -42,9 +43,12 @@ def signup(user_info: SignUp, db: Session = Depends(get_db)):
 
 #everything within ithis function right now is pretty much my 
 @router.post("/users/login")
-def login(login_info: Login, db: Session = Depends(get_db)):
-  identifier = login_info.usernameOrEmail
-  password = login_info.password
+def login(
+  form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+  db: Session = Depends(get_db),
+):
+  identifier = form_data.username
+  password = form_data.password
   
   user = get_user_by_username(identifier, db)
   if not user: 
@@ -61,3 +65,7 @@ def login(login_info: Login, db: Session = Depends(get_db)):
   access_token = create_access_token(data={"sub": str(user.userid)}, expires_delta=access_token_expires)
   
   return Token(access_token=access_token, token_type="bearer")
+
+@router.get("/users/me")
+def read_me(current_user: Users = Depends(get_current_user)):
+    return {"id": current_user.userid}
