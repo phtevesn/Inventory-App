@@ -1,7 +1,6 @@
 
 
-import Dashboard from '@/app/ui/inventories/dashboard';
-
+import Dashboard from '@/app/ui/dashboard/dashboard';
 
 export default function Page(){
   return (

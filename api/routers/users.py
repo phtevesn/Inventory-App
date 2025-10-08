@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -41,9 +41,9 @@ def signup(user_info: SignUp, db: Session = Depends(get_db)):
       detail="DB session failed to add user"
     )
 
-#everything within ithis function right now is pretty much my 
 @router.post("/users/login")
 def login(
+  response: Response,
   form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
   db: Session = Depends(get_db),
 ):
@@ -55,17 +55,32 @@ def login(
     user = get_user_by_email(identifier, db)
 
   if not user or not verify_password(password, user.password):
-    #here is pretty much where theat authenticate_user function finishes
+
     raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid credentials",
+      status_code=status.HTTP_401_UNAUTHORIZED,
+      detail="Invalid credentials",
     )
     
   access_token_expires = timedelta(minutes=1440)
   access_token = create_access_token(data={"sub": str(user.userid)}, expires_delta=access_token_expires)
   
-  return Token(access_token=access_token, token_type="bearer")
+  response.set_cookie(
+    key="access_token",
+    value=access_token,
+    httponly=True,       # good security; JS can’t read it
+    samesite="Lax",      # works on same-site (localhost:3000 → 8000)
+    secure=False,        # set True only under HTTPS
+    path="/",
+    max_age=60*60*24,    # optional, 1 day
+  )
+  return {"message": "Login successful"}
+
 
 @router.get("/users/me")
-def read_me(current_user: Users = Depends(get_current_user)):
-    return {"id": current_user.userid}
+def me(current_user: Users = Depends(get_current_user)):
+  return {"id": current_user.userid, "email": current_user.email}
+
+@router.post("/users/logout")
+def logout(response: Response):
+  response.delete_cookie("access_token", path="/")
+  return {"message": "you know how in clash royale the log rolls. instead of roll they say, autobots log out"}

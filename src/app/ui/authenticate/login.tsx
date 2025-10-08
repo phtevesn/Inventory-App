@@ -24,7 +24,8 @@ export default function Login(){
         try {
             const response = await(loginUser(formData))
             if (response.status ===200){
-                router.push('/dashboard')
+                console.log(response);
+                router.push('/dashboard');
             } 
             else if (response.status === 401) setMessage(invalidMessage)
         } catch (error) {

@@ -1,4 +1,4 @@
-'use server'
+'use client'
 
 type loginForm = {
     usernameOrEmail: string, 
@@ -9,13 +9,14 @@ export async function loginUser(loginData: loginForm){
     console.log(loginData)
 
      const body = new URLSearchParams({
-        username: loginData.usernameOrEmail,  // FastAPI expects "username"
+        username: loginData.usernameOrEmail, 
         password: loginData.password,
     });
     const res = await fetch("http://localhost:8000/users/login", {
         method: 'POST',
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body
+        body,
+        credentials: "include"
     });
 
     const status = res.status
