@@ -4,7 +4,6 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import Annotated
-import jwt
 
 from db import get_db
 from utils import verify_password

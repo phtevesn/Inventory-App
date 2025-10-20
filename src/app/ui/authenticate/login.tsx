@@ -3,8 +3,8 @@
 import {useState} from 'react';
 import {useRouter} from 'next/navigation';
 
-import SignUpButton from '@/app/utils/signup'
-import TextBox from '@/app/utils/auth-text';
+import SignUpButton from '@/app/utils/users/signup'
+import TextBox from '@/app/utils/users/auth-text';
 import { loginUser } from '@/app/routing/authenticate/login';
 
 
@@ -23,7 +23,7 @@ export default function Login(){
         }
         try {
             const response = await(loginUser(formData))
-            if (response.status ===200){
+            if (response.status === 200){
                 console.log(response);
                 router.push('/dashboard');
             } 
@@ -34,16 +34,16 @@ export default function Login(){
     }
 
     return (
-    <div className="space-y-2 w-[300px]">
-        <form onSubmit={submitAuth}>
-            <TextBox name='username' label="username/email" type='text' value={usernameOrEmail} onChange={setUsername} required/>
-            <TextBox name='password' label="password" type='password' value={password} onChange={setPassword} required/>
-            <p className="w-full text-center text-red-400" > {message} </p>
-            <div className="flex mt-4 ">
-                <SignUpButton />
-                <button type='submit' className='auth-button ml-auto'>Login</button>
-                
-            </div>
-        </form>
-    </div>);
+        <div className="space-y-2 w-[300px]">
+            <form onSubmit={submitAuth}>
+                <TextBox name='username' label="username/email" type='text' value={usernameOrEmail} onChange={setUsername} required/>
+                <TextBox name='password' label="password" type='password' value={password} onChange={setPassword} required/>
+                <p className="w-full text-center text-red-400" > {message} </p>
+                <div className="flex mt-4 ">
+                    <SignUpButton />
+                    <button type='submit' className='auth-button ml-auto'>Login</button>
+                </div>
+            </form>
+        </div>
+    );
 }

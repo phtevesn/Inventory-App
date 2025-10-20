@@ -1,14 +1,12 @@
-import Link from 'next/link';
-import Image from 'next/image';
+
 
 import Login from '@/app/ui/authenticate/login'
+import Logo from '@/app/utils/logo'
 
 export default function AuthPage(){
     return (
     <div className="flex flex-col items-center justify-center min-h-screen pb-30">
-        <Link href='/'>
-            <Image src="/temp-logo.png" width={200} height={200} alt="Company Logo" />
-        </Link>
+        <Logo w={200} h={200}/>
         <h1>Inventory App</h1>
         <Login />
     </div> );

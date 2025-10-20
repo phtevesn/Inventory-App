@@ -163,7 +163,10 @@ class UserInvs(Base):
                  ForeignKey("inv.inventories.invid", 
                  ondelete="cascade", onupdate="cascade"),
                  primary_key=True)
-  roleid = Column(Integer, nullable=False)
+  roleid = Column(Integer, 
+                  ForeignKey("inv.userroles.roleid",
+                  ondelete="set default", onupdate="cascade"),
+                  nullable=False, server_default=text('4'))
 
 class UserSkelesFav(Base):
   __tablename__ = "userskelesfav"

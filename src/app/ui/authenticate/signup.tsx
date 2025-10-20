@@ -4,7 +4,7 @@ import {useState} from 'react';
 import Link from 'next/link';
 
 import Button from '@/app/utils/button'
-import TextBox from '@/app/utils/auth-text';
+import TextBox from '@/app/utils/users/auth-text';
 import {addUser} from '@/app/routing/authenticate/signup'
 
 export default function SignUp(){

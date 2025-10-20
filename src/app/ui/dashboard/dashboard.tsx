@@ -3,37 +3,47 @@
 import {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation';
 
-import { getUserStuff, logout } from "@/app/routing/dashboard/dashboard";
+import {getUserStuff} from "@/app/routing/dashboard/dashboard";
+import {logoutUser} from "@/app/utils/users/logout"
+import CreateInventory from "@/app/ui/inventory/create"
 
 export default function Dashboard(){
-    const router = useRouter();
+  const router = useRouter();
 
-    const [user, setUser] = useState<{ id: number; email: string } | null>(null); //why does this need to be set to null 
-    async function logoutUser(){
-        const response = await logout();
-        if (response.status === 200){
-            router.push("/");
-        }
+  const [search, setSearch] = useState("");
+  const [user, setUser] = useState<{ id: number; email: string } | null>(null);
+  const [showForm, setShowForm] = useState(false);
+
+  function createInv(){
+    setShowForm(true);
+  }
+
+  useEffect(() => {
+    async function loadUser() {
+      const data = await getUserStuff();
+      setUser(data)
     }
 
-    useEffect(() => {
-        async function loadUser() {
-            const data = await getUserStuff();
-            setUser(data)
-        }
+    loadUser();
+  }, []);
 
-        loadUser();
-    }, []);
+  if (!user){
+    return <div>Loading ma boi gimme a seccy</div>;
+  }
+  console.log(user.id)
 
-    if (!user) return <div>Loading ma boi gimme a seccy</div>;
-
-    return (
-        <div className="flex justify-center  mt-4">
-            <p className = "border border-neutral-200">
-                penis {user.id}
-            </p>
-            <button onClick={logoutUser}> logout </button>
-            
-        </div>
-    );
+  return (
+    <div>
+      <div><button onClick={logoutUser}> logout </button></div>
+      <div className="flex flex-col justify-center items-center w-[500px] mt-40">
+        <input
+          className = "search-input"
+          placeholder = "search your inventories"
+          onChange = {(e)=> setSearch(e.target.value)}>
+        </input>
+        {!showForm && <button onClick={createInv} className="auth-button rounded-full mt-4"> create inventory </button>}
+        {showForm && <CreateInventory />}
+      </div>
+    </div>
+  );
 }

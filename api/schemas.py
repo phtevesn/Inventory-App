@@ -18,4 +18,6 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     id: int
     #email: str | None = None
-    
+
+class CreateInv(BaseModel):
+    invName: str

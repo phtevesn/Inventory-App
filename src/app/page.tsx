@@ -1,8 +1,8 @@
 import Image from "next/image";
 import '@/app/globals.css';
 
-import LoginButton from '@/app/utils/login';
-import SignUpButton from "@/app/utils/signup";
+import LoginButton from '@/app/utils/users/login';
+import SignUpButton from "@/app/utils/users/signup";
 
 export default function Home() {
   return (
