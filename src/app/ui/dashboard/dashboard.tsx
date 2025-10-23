@@ -55,14 +55,13 @@ export default function Dashboard(){
         {!showForm && <button onClick={createInv} className="auth-button rounded-full mt-4"> create inventory </button>}
         {showForm && <CreateInventory />}
       </div>
-            <div className="flex flex-col justify-center items-center mt-10 space-y-4">
-        {sampo_data.map((inv) => (
-          <div key={inv.invID}>
-            <InvTab invID={inv.invID} invName={inv.invName} />
-          </div>
-        ))}
-      </div>
-
+        <div className="flex flex-col justify-center items-center mt-10 space-y-4">
+          {sampo_data.map((inv) => (
+            <div key={inv.invID}>
+              <InvTab invID={inv.invID} invName={inv.invName} />
+            </div>
+          ))}
+        </div>
     </div>
   );
 }
