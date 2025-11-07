@@ -11,14 +11,15 @@ def create_inv(id: int, inv_name: str,  db: Session):
     invname = inv_name, 
     ownerid = id
   )
+  ownerInv = UserInvs(
+    userid = id,
+    invid = inv.invid,
+    roleid = OWNER
+  )
   try:
     db.add(inv)
     db.flush()
-    ownerInv = UserInvs(
-      userid = id,
-      invid = inv.invid,
-      roleid = OWNER
-    )
+
     db.add(ownerInv)
     db.commit()
     db.refresh(inv)
@@ -49,7 +50,20 @@ def get_invs(id: int, db: Session):
     .filter(UserInvs.userid == id)
     .all()
   )
-  #okay i need to figure out a way to map rows 
+  return [{"invid": r[0], "invname": r[1]} for r in rows]
 
+def edit_inv(id: int, inv_name: str, db: Session):
+  inv = db.query(Inventories).filter(Inventories.invid == id).first()
+  if not inv:
+    return None
   
+  inv.invname = inv_name
+  
+  try:
+    db.commit()
+    db.refresh(inv)
+    return {"invid": inv.invid, "invname": inv.invname}
+  except SQLAlchemyError:
+    db.rollback()
+    return None
   

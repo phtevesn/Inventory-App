@@ -5,7 +5,7 @@ from schemas import CreateInv
 from models import Users
 
 from db import get_db
-from services.inv_service import create_inv, get_invs, delete_inv
+from services.inv_service import create_inv, get_invs, delete_inv, edit_inv
 from services.auth_service import get_current_user
 
 router = APIRouter()
@@ -43,4 +43,13 @@ def getInventories(current_user: Users = Depends(get_current_user), db: Session 
   inventories = get_invs(current_user.userid, db)
   return inventories
   
+@router.get("/inventory/edit")
+def editInventory(inv_id: int, new_inv_name: str, db: Session = Depends(get_db)):
+  updatedInv = edit_inv(inv_id, new_inv_name, db)
+  if not updatedInv:
+    raise HTTPException(
+      status_code=status.HTTP_400_BAD_REQUEST,
+      detail="Inventory was failed to update"
+    )
+  return updatedInv
   
