@@ -19,21 +19,43 @@ def create_folder(folder_info: FolderInfo, user_id: int, db: Session):
   except SQLAlchemyError:
     db.rollback()
     return False
-  
-  
-def get_folder_and_pfolder(folder_id: int, db : Session):
-  folder = db.query(Folders).filter(Folders.folderid == folder_id).first()
-  
-def delete_folder_inclusive(folder_id: int, db : Session):
-  #deleting folder deletes all contents in folder, including other folders 
-  folder = db.query(Folders).filter(Folders.folderid == folder_id).first()
-  
-def delete_folder_exclusive():
-  #deleting folder deletes folder, moves everything into parent folder/removes folder 
 
-def get_folders():
-  
 
-def edit_folder():
- #moving a folder 
+def edit_folder(folder_id: int, folder_name: str, db: Session):
+  folder = db.query(Folders).filter(Folders.folderid == folder_id).first()
+  if not folder:
+    return None
+  
+  folder.foldername = folder_name
+
+  try:
+    db.commit()
+    db.refresh(folder)
+    return folder.foldername
+  except SQLAlchemyError:
+    db.rollback()
+    return None
  
+  
+def delete_folder(folder_id: int, db : Session):
+  #deleting folder deletes all contents in folder, including other folders and skele_instances
+  folder = db.query(Folders).filter(Folders.folderid == folder_id).first()
+  if not folder:
+    return None
+  
+  try:
+    db.delete(folder)
+    db.commit()
+    return True
+  except SQLAlchemyError:
+    db.rollback()
+    return False
+
+  
+def get_root_folders(inv_id: int, db: Session):
+  folders = db.query(Folders).filter(Folders.invid == inv_id, Folders.parentfolderid == None).all()
+  return folders
+  
+def get_child_folders(folder_id: int, db: Session):
+  folders = db.query(Folders).filter(Folders.folderid == folder_id).all()
+  return folders

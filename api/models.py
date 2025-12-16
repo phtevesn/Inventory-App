@@ -108,7 +108,7 @@ class SkeleInstances(Base):
                  nullable=False)
   folderid = Column(BigInteger,
                     ForeignKey("inv.folders.folderid",
-                    onupdate="set null", ondelete="set null"),
+                    onupdate="cascade", ondelete="cascade"),
                     nullable=True)
   count = Column(Integer, nullable = False)
   
