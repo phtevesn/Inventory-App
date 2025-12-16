@@ -1,0 +1,70 @@
+users (userID, username, password, email)
+#user information 
+
+userInvs(userInvsID, userID, invID, roleID)
+#inventories user has access to
+
+userStatuses(userStatusesID, userID, statusID)
+#statues owns
+
+userSkelesFav(userSkelesFavID, userID, skeleID)
+#skeletons user has favorited 
+
+userStatusesFav(userStatusesFavID, userID, statusID)
+#statues user has favorited 
+
+userRoles(roleID, canUpRole, canInvite, canWrite) #canRead implied
+#owner, superadmin, admin, user
+
+
+
+
+skeletons(skeleID, skeleName, imgPath, skeleAttr, creatorID, posted, deleted_at) 
+#folders is what items in stated folder can be created however cannot root to parent skele
+#skeleton/structure of an item. attributes same accross all.
+#editing skeleton creates new skeleID if it has been imported 
+#if there are already items in must create a new skeleton if not clean edit
+skeleInstances(skeleInstancesID, skeleID, invID, folderID, count)
+
+skeleParent(skeleID, parentSkeleID)
+skeleChild(skeleID, childSkeleID)
+#if a skeleton is composed of skeletons
+
+skeleFolders(skeleID, folderID)
+#if a skeleton is composed of a folder 
+skeleComm(skeleID, skeleName, imgPath, skeleAttr, userID, numDownloads)  #userID is the creator
+#skeletons that are posted to the community
+#these skeletons can be imported in to databases, favorited, etc.
+
+
+
+inventories (invID, invName, ownerID, parentInvID, imgPath, deleted_at)
+#inventory info 
+#Does ChildItemCount sets whether items apart of another item count in the skeleton
+invStatuses(invStatusesID, invID, statusID)
+#statuses inventory has access to 
+
+invSkele(relID, invID, skeleID)
+#items inventory has access to 
+
+
+
+folders(folderID, invID, parentFolderID, folderName, imgPath, deleted_at)
+#folder information
+
+folderSkeles(folderID, skeleInstancesID) 
+#skeletons within a folder 
+
+
+statuses(statusID, statusName, imgPath, doesItCount)
+
+statusesComm(statusID, statusName, imgPath, doesItCount, numDownloads) #doesItCount a binary number that determines worthy for adding to inv count
+
+
+
+
+items(itemID, invID, skeleID, skeleInstanceID, parentItemID, statusID, itemAttr, notes,  dateCreated, deleted_at)
+#if an item has a parentItem it should be reflected in the status type
+
+
+#saving community posts for latter

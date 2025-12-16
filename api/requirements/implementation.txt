@@ -1,0 +1,64 @@
+Be able to create multiple inventories  
+    Be able to make inventory in an inventory 
+    (Use case Big company with multiple locations) Each has a different inventory
+        If inventory has multiple inventories ask if wanted to be merged 
+        where every has what inventory they come from
+    Copy inventory strucutre with or without including inventory
+    Create a merged inventory.
+        if structure is the same ask user if want to merge all object Folders
+        do not allow merging if strucuture is not the same
+        be able to identify if the strucutures are the same
+        allow user to select the object folders wanted to be merged 
+        if user does not want to merge object folder
+            automatically rename one of the folders 
+    Select what objects want to be added to the new inventory 
+
+
+Create Object Types
+    Create Objects
+        Objects can be composed of other Objects
+        Objects can have up to dynamic amount of features
+        Objects must have a title 
+            Object titles do not have to be unique
+            object features can distinguish not the name
+        Objects should be display in a tree fashion 
+            root on the left branches going to the right
+            ex. object on the left features on the right 
+            ex. object made of object root object on the left
+        Each Object includes a notes section 
+        Objects have a count of how many there are 
+            Objects of the same count have the same value for the feature
+            There should be a place to create said features
+                Each individualObject(indObj) can have unique features
+                there should be a place to create unique features
+                these unique features must have different values 
+
+Create Users
+    Users have a status, Owner, admin, user, viewer
+    if inventory is created locally viewer status will always be section
+    if inventory is on the web set inventory public or private
+        if public viewer status is open for anyone
+    Owners can invite others to inventory 
+    Be able to transfer ownership
+    create an allow this admin to invite, promote users
+
+
+Adding 
+
+Editing
+    Should be able to edit any title, feature, obejct etc. 
+    Should be able to move any folder into any folder
+    If object follows strucuture an move into another object
+
+Deleting
+    deleting an object will remove them to every folder they belong to
+    delete any indObj, object, object type,  
+
+
+
+Include a recently deleted folder that follows the same strucuture
+Include a search bar to search within inventory
+Compatible with importing from PC part picker
+Be able to import/select premade inventories, .csv, or excel
+Implementation with Freshdesk if inventory sold, loaned, etc.
+Include community page to import/export structures templates 

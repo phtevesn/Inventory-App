@@ -1,0 +1,7 @@
+front end
+ - Next.js(React and Typescript)
+back end
+ - Fast Api - python trending web framework
+ - SQLAlchemy - python library to talk to databases
+database
+ - Postgresql - object relation database
