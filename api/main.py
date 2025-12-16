@@ -5,11 +5,13 @@ import uvicorn
 from routers import health
 from routers import users
 from routers import inventory
+from routers import skeletons
 
 app = FastAPI()
 app.include_router(health.router)
 app.include_router(users.router)
 app.include_router(inventory.router)
+app.include_router(skeletons.router)
 
 app.add_middleware(
   CORSMiddleware,
@@ -25,3 +27,24 @@ def root():
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+  
+'''
+ inv    | folders        | table | inventory   
+ inv    | folderskeles   | table | inventory
+ inv    | inventories    | table | inventory
+ inv    | invskeles      | table | inventory
+ inv    | invstatuses    | table | inventory
+ inv    | items          | table | inventory
+ inv    | skelechildren  | table | inventory
+ inv    | skelefolders   | table | inventory
+ inv    | skeleinstances | table | inventory
+ inv    | skeleparents   | table | inventory
+ inv    | skeletons      | table | inventory
+ inv    | statuses       | table | inventory
+ inv    | userinvs       | table | inventory
+ inv    | userroles      | table | inventory
+ inv    | users          | table | inventory
+ inv    | userskelesfav  | table | inventory
+ inv    | userstatusfav  | table | inventory
+
+'''

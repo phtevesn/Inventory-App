@@ -22,7 +22,7 @@ def createInventory(inv_info: CreateInv, current_user: Users = Depends(get_curre
     )
   return {"message": f"Inventory ({inv_name}) created", "inventory_id": inv}
   
-@router.get("/inventory/delete")
+@router.delete("/inventory/delete")
 def deleteInventory(inv_id: int, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   res = delete_inv(inv_id, current_user.userid, db)
   if res == "fail":
@@ -43,7 +43,7 @@ def getInventories(current_user: Users = Depends(get_current_user), db: Session 
   inventories = get_invs(current_user.userid, db)
   return inventories
   
-@router.get("/inventory/edit")
+@router.put("/inventory/edit")
 def editInventory(inv_id: int, new_inv_name: str, db: Session = Depends(get_db)):
   updatedInv = edit_inv(inv_id, new_inv_name, db)
   if not updatedInv:

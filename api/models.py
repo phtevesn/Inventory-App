@@ -267,6 +267,6 @@ class FolderSkeles(Base):
                     ondelete="cascade", onupdate="cascade"),
                     primary_key=True)
   skeleinstanceid = Column(BigInteger, 
-                           ForeignKey("inv.skeleisntances.skeleinstanceid",
+                           ForeignKey("inv.skeleinstances.skeleinstanceid",
                            ondelete="cascade", onupdate="cascade"),
                            primary_key=True)

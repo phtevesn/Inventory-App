@@ -21,3 +21,15 @@ class TokenData(BaseModel):
 
 class CreateInv(BaseModel):
     invName: str
+    
+class SkeleInfo(BaseModel):
+    skele_name: str
+    img_path: str
+    attributes: dict
+    
+class FolderInfo(BaseModel):
+    folder_name: str
+    inv_id: int
+    parent_folder_id: int | None = None
+    
+    
