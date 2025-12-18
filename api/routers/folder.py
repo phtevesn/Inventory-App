@@ -37,7 +37,7 @@ def editFolder(folder_id: int, folder_name: str, db: Session = Depends(get_db)):
     )
   return new_folder_name
 
-@router.put("/folder/delete")
+@router.delete("/folder/delete")
 def deleteFolder(folder_id: int, db: Session = Depends(get_db)):
   if not delete_folder(folder_id, db):
     raise HTTPException(
@@ -46,7 +46,7 @@ def deleteFolder(folder_id: int, db: Session = Depends(get_db)):
     )
   return True
 
-@router.put("/folder/root/get")
+@router.get("/folder/root/get")
 def getRootFolders(inv_id: int, db: Session = Depends(get_db)):
   folders = get_root_folders(inv_id, db)
   if not folders:
@@ -56,7 +56,7 @@ def getRootFolders(inv_id: int, db: Session = Depends(get_db)):
     )
   return folders
 
-@router.put("/folders/child/get")
+@router.get("/folders/child/get")
 def getChildFolders(folder_id: int, db: Session = Depends(get_db)):
   folders = get_child_folders(folder_id, db)
   if not folders:
