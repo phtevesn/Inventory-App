@@ -15,17 +15,16 @@ def create_folder(folder_info: FolderInfo, user_id: int, db: Session):
     db.add(folder)
     db.commit()
     db.refresh(folder)
-    return True
+    return folder
   except SQLAlchemyError:
     db.rollback()
-    return False
+    return None
 
 
 def edit_folder(folder_id: int, folder_name: str, db: Session):
   folder = db.query(Folders).filter(Folders.folderid == folder_id).first()
   if not folder:
     return None
-  
   folder.foldername = folder_name
 
   try:
@@ -49,13 +48,15 @@ def delete_folder(folder_id: int, db : Session):
     return True
   except SQLAlchemyError:
     db.rollback()
-    return False
+    return None
 
   
 def get_root_folders(inv_id: int, db: Session):
-  folders = db.query(Folders).filter(Folders.invid == inv_id, Folders.parentfolderid == None).all()
+  folders = (db.query(Folders)
+  .filter(Folders.invid == inv_id, Folders.parentfolderid == None, Folders.deleted_at == None)
+  .all())
   return folders
   
 def get_child_folders(folder_id: int, db: Session):
-  folders = db.query(Folders).filter(Folders.folderid == folder_id).all()
+  folders = db.query(Folders).filter(Folders.folderid == folder_id, Folders.deleted_at == None).all()
   return folders
