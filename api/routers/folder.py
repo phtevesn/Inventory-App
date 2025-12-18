@@ -46,7 +46,7 @@ def deleteFolder(folder_id: int, db: Session = Depends(get_db)):
     )
   return True
 
-@router.get("/folder/root/get")
+@router.get("/folders/root/get")
 def getRootFolders(inv_id: int, db: Session = Depends(get_db)):
   folders = get_root_folders(inv_id, db)
   if not folders:
