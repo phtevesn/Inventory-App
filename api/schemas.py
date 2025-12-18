@@ -32,4 +32,8 @@ class FolderInfo(BaseModel):
     inv_id: int
     parent_folder_id: int | None = None
     
-    
+class SkeleInstanceInfo(BaseModel):
+    skele_id: int
+    inv_id: int 
+    folder_id: int
+    count: int
