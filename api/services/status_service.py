@@ -53,7 +53,7 @@ def delete_status(status_id: int, db:Session):
 
 
 def get_user_statuses(user_id: int, db:Session):
-  statuses = db.query(Statuses)
+  statuses = db.query(Statuses).filter()
 
 
 def get_inv_statuses(inv_id: int, db:Session):
