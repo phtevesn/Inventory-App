@@ -11,7 +11,8 @@ from services.folder_service import (
   edit_folder,
   delete_folder,
   get_child_folders,
-  get_root_folders
+  get_root_folders,
+  get_folders
 )
 
 
@@ -63,5 +64,15 @@ def getChildFolders(folder_id: int, db: Session = Depends(get_db)):
     raise HTTPException(
       status_code=status.HTTP_400_BAD_REQUEST,
       detail=f"Failed to get child folders from folder with folder id: {folder_id}"
+    )
+  return folders
+
+@router.get("/folders/get")
+def getFolders(inv_id: int, db:Session = Depends(get_db)):
+  folders = get_folders(inv_id, db)
+  if not folders:
+    raise HTTPException(
+      status_code=status.HTTP_400_BAD_REQUEST,
+      detail = f"Failed to get inventories folders with inventory id: {inv_id}"
     )
   return folders

@@ -60,3 +60,7 @@ def get_root_folders(inv_id: int, db: Session):
 def get_child_folders(folder_id: int, db: Session):
   folders = db.query(Folders).filter(Folders.folderid == folder_id, Folders.deleted_at == None).all()
   return folders
+
+def get_folders(inv_id: int, db:Session):
+  folders = db.query(Folders).filter(Folders.invid == inv_id, Folders.deleted_at == None).all()
+  return folders
