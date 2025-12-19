@@ -52,8 +52,8 @@ def getRootFolders(inv_id: int, db: Session = Depends(get_db)):
   folders = get_root_folders(inv_id, db)
   if not folders:
     raise HTTPException(
-      status_code= status.HTTP_400_BAD_REQUEST,
-      detail = f"Failed to get root folders for inventory with inventory id: {inv_id}"
+      status_code=status.HTTP_404_NOT_FOUND,
+      detail = f"No folders with inventory id: {inv_id}"
     )
   return folders
 
@@ -62,8 +62,8 @@ def getChildFolders(folder_id: int, db: Session = Depends(get_db)):
   folders = get_child_folders(folder_id, db)
   if not folders:
     raise HTTPException(
-      status_code=status.HTTP_400_BAD_REQUEST,
-      detail=f"Failed to get child folders from folder with folder id: {folder_id}"
+      status_code=status.HTTP_404_NOT_FOUND,
+      detail=f"No child folders with folder id: {folder_id}"
     )
   return folders
 
@@ -72,7 +72,7 @@ def getFolders(inv_id: int, db:Session = Depends(get_db)):
   folders = get_folders(inv_id, db)
   if not folders:
     raise HTTPException(
-      status_code=status.HTTP_400_BAD_REQUEST,
-      detail = f"Failed to get inventories folders with inventory id: {inv_id}"
+      status_code=status.HTTP_404_NOT_FOUND,
+      detail = f"No folders with inventory id: {inv_id}"
     )
   return folders
