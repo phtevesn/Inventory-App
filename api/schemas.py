@@ -37,3 +37,8 @@ class SkeleInstanceInfo(BaseModel):
     inv_id: int 
     folder_id: int
     count: int
+
+class StatusInfo(BaseModel):
+    status_name: str
+    img_path: str
+    does_it_count: bool
