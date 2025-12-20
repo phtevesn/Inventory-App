@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
-from models import Statuses
+from models import Statuses, InvStatuses
 from schemas import StatusInfo
 
 def create_status(status_info: StatusInfo, cur_user: int, db: Session):
@@ -53,14 +53,38 @@ def delete_status(status_id: int, db:Session):
 
 
 def get_user_statuses(user_id: int, db:Session):
-  statuses = db.query(Statuses).filter()
-
+  statuses = db.query(Statuses).filter(Statuses.creatorid == user_id).all()
+  return statuses
 
 def get_inv_statuses(inv_id: int, db:Session):
+  inv_status_ids = db.query(InvStatuses.statusid).filter(InvStatuses.invid == inv_id).all()
+  if not inv_status_ids:
+    return None
+  status_ids = [status[0] for status in inv_status_ids]
+  statuses = db.query(Statuses).filter(Statuses.statusid.in_(status_ids)).all()
+  return statuses
 
+def add_inv_status(inv_id: int, status_id: int, db:Session):
+  relation = InvStatuses(
+    statusid = status_id,
+    invid = inv_id
+  )
+  
+  try:
+    db.add(relation)
+    db.commit()
+    db.refresh(relation)
+    return relation
+  except SQLAlchemyError:
+    db.rollback()
+    return None
+  
+  
+
+'''
 def get_fav_statuses(cur_user: int, db:Session):
 
 def fav_status(cur_user: int, status_id: int, db:Session):
 
 def unfav_status(cur_user:int, status_id: int, db:Session):
-
+'''
