@@ -40,7 +40,7 @@ def edit_skele(skele_info: SkeleInfo, skele_id: int, db: Session):
   skele.attributes = skele_info.attributes
   
   try:
-    db.commit
+    db.commit()
     db.refresh(skele)
     return {"id": skele.skeleid, "name": skele.skelename}
   except SQLAlchemyError:
@@ -89,7 +89,7 @@ def favorite_skele(user_id: int, skele_id: int, db: Session):
     db.commit()
     db.refresh(relation)
     return True
-  except:
+  except SQLAlchemyError:
     db.rollback()
     return False
   
@@ -102,6 +102,6 @@ def unfavorite_skele(user_id: int, skele_id: int, db:Session):
     db.delete(relation)
     db.commit()
     return True
-  except:
+  except SQLAlchemyError:
     db.rollback()
     return False

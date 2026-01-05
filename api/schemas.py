@@ -42,3 +42,9 @@ class StatusInfo(BaseModel):
     status_name: str
     img_path: str
     does_it_count: bool
+    
+class ItemInfo(BaseModel):
+    skele_instance_id: int
+    parent_item_id: int 
+    status_id: int 
+    notes: str
