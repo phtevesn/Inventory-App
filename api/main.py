@@ -8,6 +8,8 @@ from routers import inventory
 from routers import skeletons
 from routers import folder
 from routers import skeleinstance
+from routers import statuses
+from routers import items 
 
 app = FastAPI()
 app.include_router(health.router)
@@ -16,6 +18,9 @@ app.include_router(inventory.router)
 app.include_router(skeletons.router)
 app.include_router(folder.router)
 app.include_router(skeleinstance.router)
+app.include_router(statuses.router)
+app.include_router(items.router)
+
 
 app.add_middleware(
   CORSMiddleware,

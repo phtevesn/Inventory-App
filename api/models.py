@@ -134,7 +134,7 @@ class Items(Base):
                      ForeignKey("inv.users.userid",
                      ondelete="set null", onupdate="cascade"),
                      nullable=True)
-  attributes = Column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+  attributes = Column(JSONB, nullable=False)
   #^attributes should probably be removed because at that point it is not the same item^
   #2 least change this to nullable=true on the db 
   notes = Column(String, nullable=True)
