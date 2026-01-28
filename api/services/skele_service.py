@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -25,7 +26,7 @@ def create_skele(skele_info: SkeleInfo, user_id: int, db: Session):
     db.commit()
     db.refresh(skele)
     
-    return {"id": skele.skeleid, "name": skele.skelename}
+    return skele
   except SQLAlchemyError:
     db.rollback()
     return None
@@ -105,3 +106,4 @@ def unfavorite_skele(user_id: int, skele_id: int, db:Session):
   except SQLAlchemyError:
     db.rollback()
     return False
+

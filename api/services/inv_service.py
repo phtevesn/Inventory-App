@@ -11,21 +11,25 @@ def create_inv(id: int, inv_name: str,  db: Session):
     invname = inv_name, 
     ownerid = id
   )
-  ownerInv = UserInvs(
-    userid = id,
-    invid = inv.invid,
-    roleid = OWNER
-  )
+  
+  print(f"{id}, {inv_name}")
+
   try:
     db.add(inv)
     db.flush()
+    
+    ownerInv = UserInvs(
+      userid = id,
+      invid = inv.invid,
+      roleid = OWNER
+    )
 
     db.add(ownerInv)
     db.commit()
-    db.refresh(inv)
     return inv.invid
-  except SQLAlchemyError:
+  except SQLAlchemyError as e:
     db.rollback()
+    print("SQLAlchemyError", e)
     return None
 
 def delete_inv(inv_id: int, id: int, db: Session):

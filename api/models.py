@@ -1,14 +1,16 @@
 from sqlalchemy import Column, Integer, String, BigInteger, DateTime, func, ForeignKey, text, Boolean
 from sqlalchemy.orm import declarative_base 
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 from sqlalchemy.sql import func 
 
 Base = declarative_base()
 
 '''
-Edits that might need to be made
-- attributes in the items table, might just be notes
-- userInvs table did not have .inv during queries
+Changes that need to be made
+Create Skeleton,
+Edit Skeleton, 
+
+Create ChildItems relation
 
 '''
 class Users(Base):
@@ -135,8 +137,7 @@ class Items(Base):
                      ondelete="set null", onupdate="cascade"),
                      nullable=True)
   attributes = Column(JSONB, nullable=False)
-  #^attributes should probably be removed because at that point it is not the same item^
-  #2 least change this to nullable=true on the db 
+  #these item attributes for this item to map to its child items
   notes = Column(String, nullable=True)
   created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
   updated_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False, onupdate=func.now())
@@ -196,18 +197,19 @@ class UserStatusFav(Base):
                     ondelete="cascade", onupdate="cascade"),
                     primary_key=True)
   
-  class SkeleParents(Base):
-    __tablename__ = "skeleparents"
-    __table_args__ = {'schema': 'inv'}
-    
-    skeleid = Column(BigInteger,
-                    ForeignKey("inv.skeletons.skeleid",
-                    ondelete="cascade", onupdate="cascade"),
-                    primary_key=True)
-    parentskeleid = Column(BigInteger,
-                    ForeignKey("inv.skeletons.skeleid",
-                    ondelete="cascade", onupdate="cascade"),
-                    primary_key=True)
+class SkeleParents(Base):
+  __tablename__ = "skeleparents"
+  __table_args__ = {'schema': 'inv'}
+  
+  skeleid = Column(BigInteger,
+                  ForeignKey("inv.skeletons.skeleid",
+                  ondelete="cascade", onupdate="cascade"),
+                  primary_key=True)
+  parentskeleid = Column(BigInteger,
+                  ForeignKey("inv.skeletons.skeleid",
+                  ondelete="cascade", onupdate="cascade"),
+                  primary_key=True)
+  
 class SkeleChildren(Base):
   __tablename__ = "skelechildren"
   __table_args__ = {'schema': 'inv'}
@@ -272,3 +274,30 @@ class FolderSkeles(Base):
                            ForeignKey("inv.skeleinstances.skeleinstanceid",
                            ondelete="cascade", onupdate="cascade"),
                            primary_key=True)
+  
+class ChildSkeles(Base):
+  __tablename__ = "childskeles"
+  __table_args__ = {'schema': 'inv'}
+  
+  skeleid = Column(BigInteger,
+                   ForeignKey("inv.skeletons.skeleid"),
+                   ondelete="cascade", onupdate="cascade",
+                   primary_key=True)
+  childskeleid = Column(BigInteger,
+                   ForeignKey("inv.skeletons.skeleid"),
+                   ondelete="cascade", onupdate="cascade",
+                   primary_key=True)
+  
+class ChildItems(Base):
+  __tablename__ = "childitems"
+  __table_args__ = {'schema': 'inv'}
+  
+  itemid = Column(BigInteger, 
+                  ForeignKey("inv.items.itemid"),
+                  ondelete="cascade", onupdate="cascade", 
+                  primary_key=True)
+  childitemid = Column(BigInteger, 
+                       ForeignKey("inv.items.itemid"),
+                       ondelete="cascade", onupdate="cascade",
+                       primary_key=True)
+                  

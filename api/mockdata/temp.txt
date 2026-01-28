@@ -1,0 +1,3 @@
+user: kaido
+pass: kaido
+inventory name: KW, id: 7
