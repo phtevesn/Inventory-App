@@ -12,7 +12,8 @@ from services.skele_service import (
   edit_skele, 
   get_inv_skeles, 
   favorite_skele, 
-  unfavorite_skele
+  unfavorite_skele,
+  get_child_skeles
 )
 from services.auth_service import get_current_user
 
@@ -79,3 +80,8 @@ def unfavoriteSkeleton(skele_id: int, cur_user: Users = Depends(get_current_user
       detail = "Failed to unfavorite skeleton"
     )
   return True
+
+@router.get("skeleton/childs")
+def childSkeletons(skele_id: int, db: Session = Depends(get_db)):
+  childs = get_child_skeles(skele_id)
+  return childs

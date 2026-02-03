@@ -1,8 +1,8 @@
-from sqlalchemy import func
+from sqlalchemy import func, insert, select, delete
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
-from models import Skeletons, UserSkelesFav, InvSkeles
+from models import Skeletons, UserSkelesFav, InvSkeles, ChildSkeles
 from schemas import SkeleInfo
 
 def create_skele(skele_info: SkeleInfo, user_id: int, db: Session):
@@ -21,11 +21,11 @@ def create_skele(skele_info: SkeleInfo, user_id: int, db: Session):
       userid = user_id,
       skeleid = skele.skeleid
     )
-    
     db.add(skele_relations)
+    skelechilds = skele_info.skele_childs
+    create_child_skeles(skele.skeleid, skelechilds, db)
     db.commit()
     db.refresh(skele)
-    
     return skele
   except SQLAlchemyError:
     db.rollback()
@@ -39,8 +39,10 @@ def edit_skele(skele_info: SkeleInfo, skele_id: int, db: Session):
   skele.skelename = skele_info.skele_name
   skele.imgpath = skele_info.img_path
   skele.attributes = skele_info.attributes
+  skelechilds = skele_info.skele_childs
   
   try:
+    create_child_skeles(skele.skeleid, skelechilds, db)
     db.commit()
     db.refresh(skele)
     return {"id": skele.skeleid, "name": skele.skelename}
@@ -107,3 +109,28 @@ def unfavorite_skele(user_id: int, skele_id: int, db:Session):
     db.rollback()
     return False
 
+def create_child_skeles(parent_skele_id: int, child_skele_ids: list[int], db: Session):
+  if not child_skele_ids:
+    return False
+  
+  cur_relations = db.query(ChildSkeles).filter(ChildSkeles.childskeleid.in_(child_skele_ids)).all()
+  
+  try:
+    db.execute(
+      delete(ChildSkeles).where(ChildSkeles.childskeleid.in_(child_skele_ids))
+    )
+  
+    rows = [{"childskeleid": csi, "parentskeleid": parent_skele_id} for csi in child_skele_ids]
+    
+    db.execute(insert(ChildSkeles), rows)
+    return True
+  except SQLAlchemyError as e:
+    db.rollback()
+    print(e)
+    return False
+  
+def get_child_skeles(skele_id: int, db: Session):
+  return db.scalars(
+    select(ChildSkeles.childskeleid).where(ChildSkeles.parentskeleid == skele_id)
+  ).all()        
+  

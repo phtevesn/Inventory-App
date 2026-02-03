@@ -24,6 +24,7 @@ class CreateInv(BaseModel):
     
 class SkeleInfo(BaseModel):
     skele_name: str
+    skele_childs: list[int]
     img_path: str
     attributes: dict
     

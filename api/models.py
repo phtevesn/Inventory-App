@@ -34,7 +34,7 @@ class Skeletons(Base):
   skeleid = Column(BigInteger, primary_key=True)
   skelename = Column(String, nullable=False)
   imgpath = Column(String)
-  attributes = Column(JSONB, nullable=True, server_default=text("'{}'::jsonb") )
+  attributes = Column(JSONB, nullable=True, server_default=text("'{}'::jsonb"))
   creatorid = Column(BigInteger,
                      ForeignKey("inv.users.userid",
                      ondelete="SET NULL", onupdate="CASCADE"),
@@ -279,25 +279,24 @@ class ChildSkeles(Base):
   __tablename__ = "childskeles"
   __table_args__ = {'schema': 'inv'}
   
-  skeleid = Column(BigInteger,
-                   ForeignKey("inv.skeletons.skeleid"),
-                   ondelete="cascade", onupdate="cascade",
-                   primary_key=True)
   childskeleid = Column(BigInteger,
                    ForeignKey("inv.skeletons.skeleid"),
                    ondelete="cascade", onupdate="cascade",
                    primary_key=True)
+  parentskeleid = Column(BigInteger,
+                   ForeignKey("inv.skeletons.skeleid"),
+                   ondelete="cascade", onupdate="cascade")
+
   
 class ChildItems(Base):
   __tablename__ = "childitems"
   __table_args__ = {'schema': 'inv'}
   
-  itemid = Column(BigInteger, 
+  childitemid = Column(BigInteger, 
                   ForeignKey("inv.items.itemid"),
                   ondelete="cascade", onupdate="cascade", 
                   primary_key=True)
-  childitemid = Column(BigInteger, 
+  parentitemid = Column(BigInteger, 
                        ForeignKey("inv.items.itemid"),
-                       ondelete="cascade", onupdate="cascade",
-                       primary_key=True)
+                       ondelete="cascade", onupdate="cascade")
                   
