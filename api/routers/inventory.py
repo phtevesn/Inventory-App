@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 
-from schemas import CreateInv
+from schemas import CreateInv, EditInv
 from models import Users
 
 from db import get_db
@@ -10,7 +10,7 @@ from services.auth_service import get_current_user
 
 router = APIRouter()
 
-@router.post("/inventory/create")
+@router.post("/inventories")
 def createInventory(inv_info: CreateInv, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   inv_name = inv_info.invName
   
@@ -22,7 +22,7 @@ def createInventory(inv_info: CreateInv, current_user: Users = Depends(get_curre
     )
   return {"message": f"Inventory ({inv_name}) created", "inventory_id": inv}
   
-@router.delete("/inventory/delete")
+@router.delete("/inventories/{inv_id}")
 def deleteInventory(inv_id: int, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   res = delete_inv(inv_id, current_user.userid, db)
   if res == "fail":
@@ -38,14 +38,14 @@ def deleteInventory(inv_id: int, current_user: Users = Depends(get_current_user)
   return {"message": "Inventory deleted"}
   
   
-@router.get("/inventory/get")
+@router.get("/inventories")
 def getInventories(current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   inventories = get_invs(current_user.userid, db)
   return inventories
   
-@router.put("/inventory/edit")
-def editInventory(inv_id: int, new_inv_name: str, db: Session = Depends(get_db)):
-  updatedInv = edit_inv(inv_id, new_inv_name, db)
+@router.put("/inventories/{inv_id}")
+def editInventory(inv_id: int, inv_info: EditInv, db: Session = Depends(get_db)):
+  updatedInv = edit_inv(inv_id, inv_info.invName, db)
   if not updatedInv:
     raise HTTPException(
       status_code=status.HTTP_400_BAD_REQUEST,

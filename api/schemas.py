@@ -21,6 +21,9 @@ class TokenData(BaseModel):
 
 class CreateInv(BaseModel):
     invName: str
+
+class EditInv(BaseModel):
+    invName: str
     
 class SkeleInfo(BaseModel):
     skele_name: str
