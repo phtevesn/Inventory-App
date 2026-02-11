@@ -22,8 +22,12 @@ def create_skele(skele_info: SkeleInfo, user_id: int, db: Session):
       skeleid = skele.skeleid
     )
     db.add(skele_relations)
+    
     skelechilds = skele_info.skele_childs
-    create_child_skeles(skele.skeleid, skelechilds, db)
+    if len(skelechilds) > 0:
+      if not create_child_skeles(skele.skeleid, skelechilds, db):
+        print("Failed to add child relations")
+        return None
     db.commit()
     db.refresh(skele)
     return skele
@@ -42,7 +46,10 @@ def edit_skele(skele_info: SkeleInfo, skele_id: int, db: Session):
   skelechilds = skele_info.skele_childs
   
   try:
-    create_child_skeles(skele.skeleid, skelechilds, db)
+    if len(skelechilds) > 0:
+      if not create_child_skeles(skele.skeleid, skelechilds, db):
+        print("Failed to add child relations")
+        return None
     db.commit()
     db.refresh(skele)
     return {"id": skele.skeleid, "name": skele.skelename}
@@ -110,11 +117,6 @@ def unfavorite_skele(user_id: int, skele_id: int, db:Session):
     return False
 
 def create_child_skeles(parent_skele_id: int, child_skele_ids: list[int], db: Session):
-  if not child_skele_ids:
-    return False
-  
-  cur_relations = db.query(ChildSkeles).filter(ChildSkeles.childskeleid.in_(child_skele_ids)).all()
-  
   try:
     db.execute(
       delete(ChildSkeles).where(ChildSkeles.childskeleid.in_(child_skele_ids))

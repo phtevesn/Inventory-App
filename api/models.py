@@ -123,10 +123,6 @@ class Items(Base):
                           ForeignKey("inv.skeleinstances.skeleinstanceid",
                           onupdate="cascade", ondelete="cascade"),
                           nullable=False)
-  parentitemid = Column(BigInteger, 
-                        ForeignKey("inv.items.itemid",
-                        ondelete="set null", onupdate="cascade"),
-                        nullable=True)
   statusid = Column(BigInteger,
                     ForeignKey("inv.statuses.statusid", 
                     ondelete="set default", onupdate="cascade"),
@@ -280,12 +276,14 @@ class ChildSkeles(Base):
   __table_args__ = {'schema': 'inv'}
   
   childskeleid = Column(BigInteger,
-                   ForeignKey("inv.skeletons.skeleid"),
-                   ondelete="cascade", onupdate="cascade",
+                   ForeignKey("inv.skeletons.skeleid",
+                   ondelete="cascade", onupdate="cascade"),
                    primary_key=True)
   parentskeleid = Column(BigInteger,
-                   ForeignKey("inv.skeletons.skeleid"),
-                   ondelete="cascade", onupdate="cascade")
+                   ForeignKey("inv.skeletons.skeleid",
+                   ondelete="cascade", onupdate="cascade"))
+  #may want an isRequired tab here in the future
+  #still need to have a way to simply delete relations not just editing them
 
   
 class ChildItems(Base):
@@ -293,10 +291,10 @@ class ChildItems(Base):
   __table_args__ = {'schema': 'inv'}
   
   childitemid = Column(BigInteger, 
-                  ForeignKey("inv.items.itemid"),
-                  ondelete="cascade", onupdate="cascade", 
+                  ForeignKey("inv.items.itemid",
+                  ondelete="cascade", onupdate="cascade"), 
                   primary_key=True)
   parentitemid = Column(BigInteger, 
-                       ForeignKey("inv.items.itemid"),
-                       ondelete="cascade", onupdate="cascade")
+                       ForeignKey("inv.items.itemid",
+                       ondelete="cascade", onupdate="cascade"))
                   

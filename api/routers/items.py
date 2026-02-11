@@ -27,8 +27,8 @@ def createItem(item_info: ItemInfo, cur_user: Users = Depends(get_current_user),
   return new_item
   
 @router.put("/item/edit")
-def editItem(item_id: int, status_id: int, notes: str, db: Session = Depends(get_db)):
-  edited_item = edit_item(item_id, status_id, notes, db)
+def editItem(item_id: int, status_id: int, parent_id: int, child_ids: list[int], notes: str, db: Session = Depends(get_db)):
+  edited_item = edit_item(item_id, status_id, parent_id, child_ids, notes, db)
   if not edited_item:
     raise HTTPException(
       status_code=status.HTTP_404_NOT_FOUND,
@@ -55,3 +55,6 @@ def getItems(skele_instance_id: int, db: Session = Depends(get_db)):
       detail = f"Failed to get items with skele instance id {skele_instance_id}"
     )
   return items
+
+#route to get child items
+

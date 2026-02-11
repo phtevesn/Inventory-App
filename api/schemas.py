@@ -46,6 +46,7 @@ class StatusInfo(BaseModel):
     
 class ItemInfo(BaseModel):
     skele_instance_id: int
-    parent_item_id: int 
+    item_childs: list[int]
+    item_parent: int
     status_id: int 
     notes: str
