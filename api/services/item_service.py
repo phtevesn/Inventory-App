@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
 from models import Items, ChildItems
-from schemas import ItemInfo
+from schemas import ItemInfo, ItemEdit
 
 def create_item(item_info: ItemInfo, cur_user: int, db: Session):
   item = Items(
@@ -29,17 +29,18 @@ def create_item(item_info: ItemInfo, cur_user: int, db: Session):
     db.rollback()
     return None
     
-def edit_item(item_id: int, status_id: int, parent_id: int, child_items_id: list[int], notes: str, db: Session):
+def edit_item(item_id: int, item_edit: ItemEdit, db: Session):
+  
   item = db.query(Items).filter(Items.itemid == item_id).first()
   if not item:
     return None 
   
-  item.statusid = status_id
-  item.notes = notes
+  item.statusid = item_edit.status_id
+  item.notes = item_edit.notes
   
   try: 
-    create_child_items(item_id, child_items_id, db)
-    set_parent_item(item_id, db, parent_item_id=parent_id)
+    create_child_items(item_id, item_edit.child_items_id, db)
+    set_parent_item(item_id, db, parent_item_id=item_edit.parent_id)
     
     db.commit()
     db.refresh(item)

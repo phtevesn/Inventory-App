@@ -50,9 +50,16 @@ class StatusInfo(BaseModel):
     img_path: str
     does_it_count: bool
     
+#not really a way to access the items parents. can be fixed during frontend implementation though
 class ItemInfo(BaseModel):
     skele_instance_id: int
     item_childs: list[int]
     item_parent: int
     status_id: int 
+    notes: str
+    
+class ItemEdit(BaseModel):
+    status_id: int
+    parent_id: int
+    child_items_id: list[int]
     notes: str
