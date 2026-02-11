@@ -4,6 +4,22 @@ from sqlalchemy.orm import Session
 from schemas import SkeleInfo
 from models import Users
 
+'''
+await fetch("http://localhost:8000/folders", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  },
+  body: JSON.stringify({
+    name: "Weapons",
+    inv_id: 12,
+    parent_id: null,
+  }),
+});
+
+'''
+
 from db import get_db
 from services.skele_service import (
   create_skele, 

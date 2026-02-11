@@ -5,7 +5,6 @@ from sqlalchemy.exc import SQLAlchemyError
 from models import Items, ChildItems
 from schemas import ItemInfo
 
-#need to finish create item and edit item and backend should be done
 def create_item(item_info: ItemInfo, cur_user: int, db: Session):
   item = Items(
     skeleinstanceid = item_info.skele_instance_id,
@@ -31,7 +30,6 @@ def create_item(item_info: ItemInfo, cur_user: int, db: Session):
     return None
     
 def edit_item(item_id: int, status_id: int, parent_id: int, child_items_id: list[int], notes: str, db: Session):
-  #change status or notes 
   item = db.query(Items).filter(Items.itemid == item_id).first()
   if not item:
     return None 

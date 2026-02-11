@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from models import Folders, Users
-from schemas import FolderInfo
+from models import Users
+from schemas import FolderInfo, FolderEdit
 
 from db import get_db
 from services.auth_service import get_current_user
@@ -15,10 +15,10 @@ from services.folder_service import (
   get_folders
 )
 
-
+#don't have a get skeleton instances
 router = APIRouter()
 
-@router.post("/folder/create")
+@router.post("/folder")
 def createFolder(folder_info: FolderInfo, cur_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   folder = create_folder(folder_info, cur_user.userid, db)
   if not folder:
@@ -28,9 +28,9 @@ def createFolder(folder_info: FolderInfo, cur_user: Users = Depends(get_current_
     )
   return folder
 
-@router.put("/folder/edit")
-def editFolder(folder_id: int, folder_name: str, db: Session = Depends(get_db)):
-  new_folder_name = edit_folder(folder_id, folder_name, db)
+@router.put("/folder/{folder_id}")
+def editFolder(folder_id: int, folder_edit: FolderEdit, db: Session = Depends(get_db)):
+  new_folder_name = edit_folder(folder_id, folder_edit.folder_name, db)
   if not new_folder_name:
     raise HTTPException(
       status_code=status.HTTP_404_NOT_FOUND,
@@ -38,7 +38,7 @@ def editFolder(folder_id: int, folder_name: str, db: Session = Depends(get_db)):
     )
   return new_folder_name
 
-@router.delete("/folder/delete")
+@router.delete("/folder/{folder_id}")
 def deleteFolder(folder_id: int, db: Session = Depends(get_db)):
   if not delete_folder(folder_id, db):
     raise HTTPException(
@@ -47,7 +47,7 @@ def deleteFolder(folder_id: int, db: Session = Depends(get_db)):
     )
   return True
 
-@router.get("/folders/root/get")
+@router.get("/inventory/{inv_id}/folder")
 def getRootFolders(inv_id: int, db: Session = Depends(get_db)):
   folders = get_root_folders(inv_id, db)
   if not folders:
@@ -57,7 +57,7 @@ def getRootFolders(inv_id: int, db: Session = Depends(get_db)):
     )
   return folders
 
-@router.get("/folders/child/get")
+@router.get("/folder/{folder_id}")
 def getChildFolders(folder_id: int, db: Session = Depends(get_db)):
   folders = get_child_folders(folder_id, db)
   if not folders:
@@ -67,7 +67,7 @@ def getChildFolders(folder_id: int, db: Session = Depends(get_db)):
     )
   return folders
 
-@router.get("/folders/get")
+@router.get("/inventory/{inv_id}/folders")
 def getFolders(inv_id: int, db:Session = Depends(get_db)):
   folders = get_folders(inv_id, db)
   if not folders:
