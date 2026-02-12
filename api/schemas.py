@@ -55,6 +55,9 @@ class StatusInfo(BaseModel):
     status_name: str
     img_path: str
     does_it_count: bool
+
+class StatusInv(BaseModel):
+    status_id: int
     
 #not really a way to access the items parents. can be fixed during frontend implementation though
 class ItemInfo(BaseModel):

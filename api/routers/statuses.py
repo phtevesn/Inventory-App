@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 
 from models import Statuses, Users 
-from schemas import StatusInfo
+from schemas import StatusInfo, StatusInv
 
 from db import get_db 
 from services.auth_service import get_current_user
@@ -17,7 +17,7 @@ from services.status_service import (
 
 router = APIRouter()
 
-@router.post("/status/create")
+@router.post("/statuses")
 def createStatus(status_info: StatusInfo, cur_user = Depends(get_current_user), db: Session = Depends(get_db)):
   cur_status = create_status(status_info, cur_user.userid, db)
   if not cur_status:
@@ -27,8 +27,8 @@ def createStatus(status_info: StatusInfo, cur_user = Depends(get_current_user), 
     )
   return cur_status
 
-@router.put("/status/edit")
-def editStatus(status_id: int, status_info = StatusInfo, db: Session = Depends(get_db)):
+@router.put("/statuses/{status_id}")
+def editStatus(status_id: int, status_info: StatusInfo, db: Session = Depends(get_db)):
   cur_status = edit_status(status_id, status_info, db)
   if not cur_status:
     raise HTTPException(
@@ -37,7 +37,7 @@ def editStatus(status_id: int, status_info = StatusInfo, db: Session = Depends(g
     )
   return cur_status
 
-@router.delete("/status/delete")
+@router.delete("/statuses/{status_id}")
 def deleteStatus(status_id: int, db: Session = Depends(get_db)):
   if not delete_status(status_id, db):
     raise HTTPException(
@@ -46,7 +46,7 @@ def deleteStatus(status_id: int, db: Session = Depends(get_db)):
     )
   return True
 
-@router.get("/status/inv/get")
+@router.get("/inventories/{inv_id}/statuses")
 def getInvStatuses(inv_id: int, db:Session = Depends(get_db)):
   statuses = get_inv_statuses(inv_id, db)
   if not statuses:
@@ -56,21 +56,22 @@ def getInvStatuses(inv_id: int, db:Session = Depends(get_db)):
     )
   return statuses
 
-@router.get("/status/user/get")
+@router.get("/users/me/statuses")
 def getUserStatuses(cur_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
-  statuses = get_user_statuses(cur_user.user_id,db)
+  statuses = get_user_statuses(cur_user.userid,db)
   if not statuses:
     raise HTTPException(
       status_code=status.HTTP_404_NOT_FOUND,
       detail=f"Could not find statuses for user: {cur_user.username}"
     )
+  return statuses
 
-@router.post("/status/inv/add")
-def addInvStatus(inv_id: int, status_id: int, db:Session = Depends(get_db)):
-  relation = add_inv_status(inv_id, status_id, db)
+@router.post("/inventories/{inv_id}/statuses")
+def addInvStatus(inv_id: int, status_info: StatusInv, db:Session = Depends(get_db)):
+  relation = add_inv_status(inv_id, status_info.status_id, db)
   if not relation:
     raise HTTPException(
       status_code = status.HTTP_400_BAD_REQUEST,
-      detail=f"Failed to add status: {status_id} to inventory {inv_id}"
+      detail=f"Failed to add status: {status_info.status_id} to inventory {inv_id}"
     )
   return relation
