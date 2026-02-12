@@ -29,8 +29,7 @@ class SkeleInfo(BaseModel):
     skele_name: str
     skele_childs: list[int]
     img_path: str
-    attributes: dict
-    
+    attributes: dict    
     
 #Folder api, may be not working great since i don't have a way to get skeletons
 class FolderInfo(BaseModel):
@@ -45,6 +44,10 @@ class FolderEdit(BaseModel):
 class SkeleInstanceInfo(BaseModel):
     skele_id: int
     inv_id: int 
+    folder_id: int
+    count: int
+    
+class SkeleInstanceEdit(BaseModel): 
     folder_id: int
     count: int
 
