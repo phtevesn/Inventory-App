@@ -251,3 +251,24 @@ create table inv.folderSkeles(
     foreign key (skeleInstanceID) references inv.skeleInstances(skeleInstanceID) on delete cascade on update cascade
 );
 
+create table inv.childskeles(
+    childskeleid bigint not null,
+    parentskeleid bigint not null, 
+
+    primary key(childskeleid),
+    constraint skeleFK 
+    foreign key (childskeleid) references inv.skeletons(skeleid) on delete cascade on update cascade,
+    constraint pskeleFK 
+    foreign key (parentskeleid) references inv.skeletons(skeleid) on delete cascade on update cascade
+);
+
+create table inv.childitems(
+    childitemid bigint not null,
+    parentitemid bigint not null,
+
+    primary key(childitemid),
+    constraint itemFK
+    foreign key (childitemid) references inv.items(itemid) on delete cascade on update cascade,
+    constraint pitemFK
+    foreign key (parentitemid) references inv.items(itemid) on delete cascade on update cascade
+);

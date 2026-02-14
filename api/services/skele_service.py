@@ -89,23 +89,24 @@ def get_inv_skeles(inv_id: int, db: Session):
   )
   return [{"id": r[0], "name": r[1], "attributes": r[2]} for r in rows]
 
+#will create an error if trying to add a favorite relation when it already exist
 def favorite_skele(user_id: int, skele_id: int, db: Session):
   relation = UserSkelesFav(
-    UserSkelesFav.userid == user_id,
-    UserSkelesFav.skeleid == skele_id
+    userid = user_id,
+    skeleid = skele_id
   )
   try:
     db.add(relation)
     db.commit()
     db.refresh(relation)
     return True
-  except SQLAlchemyError:
+  except SQLAlchemyError as e:
     db.rollback()
+    print(e)
     return False
   
-
 def unfavorite_skele(user_id: int, skele_id: int, db:Session):
-  relation = db.query(UserSkelesFav).filter(UserSkelesFav.userid == user_id & UserSkelesFav.skeleid == skele_id).first()
+  relation = db.query(UserSkelesFav).filter((UserSkelesFav.userid == user_id) & (UserSkelesFav.skeleid == skele_id)).first()
   if not relation:
     return False
   try:

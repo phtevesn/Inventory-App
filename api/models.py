@@ -281,7 +281,8 @@ class ChildSkeles(Base):
                    primary_key=True)
   parentskeleid = Column(BigInteger,
                    ForeignKey("inv.skeletons.skeleid",
-                   ondelete="cascade", onupdate="cascade"))
+                   ondelete="cascade", onupdate="cascade"),
+                   nullable=False)
   #may want an isRequired tab here in the future
   #still need to have a way to simply delete relations not just editing them
 
@@ -296,5 +297,6 @@ class ChildItems(Base):
                   primary_key=True)
   parentitemid = Column(BigInteger, 
                        ForeignKey("inv.items.itemid",
-                       ondelete="cascade", onupdate="cascade"))
+                       ondelete="cascade", onupdate="cascade"),
+                       nullable=False)
                   

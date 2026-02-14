@@ -1,3 +1,8 @@
+Semi-tested
+User, Inventory, Skeleton
+
+
 user: kaido
 pass: kaido
-inventory name: KW, id: 7
+inventory name: KWS, id: 8
+skeleton name: string, id: 3

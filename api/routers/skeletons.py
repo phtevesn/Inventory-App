@@ -35,7 +35,7 @@ from services.auth_service import get_current_user
 
 router = APIRouter()
 
-@router.post("/skeleton")
+@router.post("/skeletons")
 def createSkeleton(skele_info: SkeleInfo, cur_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   skele = create_skele(skele_info, cur_user.userid, db) 
   if not skele:
@@ -43,9 +43,9 @@ def createSkeleton(skele_info: SkeleInfo, cur_user: Users = Depends(get_current_
       status_code=status.HTTP_400_BAD_REQUEST,
       detail="Skeleton was failed to create"
     )
-  return {"message": f"Skeleton id:{skele['id']} was created name:{skele['name']}"}
+  return skele
 
-@router.put("/skeleton/{skele_id}")
+@router.put("/skeletons/{skele_id}")
 def editSkeleton(skele_id: int, skele_info: SkeleInfo, db: Session = Depends(get_db)):
   skele = edit_skele(skele_info, skele_id, db)
   if not skele:
@@ -56,7 +56,7 @@ def editSkeleton(skele_id: int, skele_info: SkeleInfo, db: Session = Depends(get
   return {"message": f"gucci mane"}
   
 
-@router.delete("/skeleton/{skele_id}")
+@router.delete("/skeletons/{skele_id}")
 def deleteSkeleton(skele_id: int, cur_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   if not delete_skele(cur_user.userid, skele_id, db):
     raise HTTPException(
@@ -66,18 +66,18 @@ def deleteSkeleton(skele_id: int, cur_user: Users = Depends(get_current_user), d
   return {"message": "Deleted Skeleton"}    
   
 
-@router.get("/skeleton")
+@router.get("/users/me/skeletons")
 def getUserSkeletons(cur_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   skele = get_user_skeles(cur_user.userid, db)
   return skele
 
 
-@router.get("/inventory/{inv_id}/skeletons")
+@router.get("/inventories/{inv_id}/skeletons")
 def getInvSkeletons(inv_id: int, db: Session = Depends(get_db)):
   skele = get_inv_skeles(inv_id, db)
   return skele
 
-@router.post("/skeleton/{skele_id}/favorite")
+@router.post("/skeletons/{skele_id}/favorite")
 def favoriteSkeleton(skele_id: int, cur_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   check = favorite_skele(cur_user.userid, skele_id, db)
   if not check:
@@ -87,7 +87,7 @@ def favoriteSkeleton(skele_id: int, cur_user: Users = Depends(get_current_user),
     )
   return True
 
-@router.delete("/skeleton/{skele_id}/favorite")
+@router.delete("/skeletons/{skele_id}/favorite")
 def unfavoriteSkeleton(skele_id: int, cur_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
   check = unfavorite_skele(cur_user.userid, skele_id, db)
   if not check:
@@ -97,7 +97,7 @@ def unfavoriteSkeleton(skele_id: int, cur_user: Users = Depends(get_current_user
     )
   return True
 
-@router.get("/skeleton/{skele_id}")
+@router.get("/skeletons/{skele_id}/children")
 def childSkeletons(skele_id: int, db: Session = Depends(get_db)):
   childs = get_child_skeles(skele_id, db)
   return childs
